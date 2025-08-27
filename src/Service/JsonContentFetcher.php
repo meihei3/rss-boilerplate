@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Model\ContentItem;
+use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class JsonContentFetcher implements ContentFetcherInterface
+readonly class JsonContentFetcher implements ContentFetcherInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        private readonly string $contentSourceUrl
+        private HttpClientInterface $httpClient,
+        private string $contentSourceUrl
     ) {
     }
 
@@ -20,16 +21,22 @@ class JsonContentFetcher implements ContentFetcherInterface
         $response = $this->httpClient->request('GET', $this->contentSourceUrl);
         $data = $response->toArray();
 
-        return array_map([$this, 'createContentItem'], $data);
+        return array_map(self::createContentItem(...), $data);
     }
 
-    private function createContentItem(array $data): ContentItem
+    /**
+     * @param array<string, mixed> $data
+     */
+    private static function createContentItem(array $data): ContentItem
     {
         return new ContentItem(
             title: $data['title'] ?? 'Untitled',
             description: $data['description'] ?? $data['content'] ?? '',
             link: $data['link'] ?? $data['url'] ?? '',
-            pubDate: isset($data['date']) ? new \DateTimeImmutable($data['date']) : new \DateTimeImmutable(),
+            pubDate: match (isset($data['date'])) {
+                true => new DateTimeImmutable($data['date']),
+                false => new DateTimeImmutable()
+            },
             guid: $data['guid'] ?? $data['id'] ?? null,
             category: $data['category'] ?? null,
             author: $data['author'] ?? null

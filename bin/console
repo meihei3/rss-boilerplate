@@ -3,23 +3,28 @@
 
 declare(strict_types=1);
 
+use App\Kernel;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+if (!is_file(dirname(__DIR__).'/vendor/autoload.php')) {
+    throw new LogicException('Dependencies are missing. Try running "composer install".');
+}
+
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+if (!class_exists(Application::class)) {
+    throw new LogicException('You need to add "symfony/console" as a Composer dependency.');
+}
 
 // Load environment variables
 $dotenv = new Dotenv();
-$dotenv->load(__DIR__ . '/../.env');
+$dotenv->loadEnv(dirname(__DIR__).'/.env');
 
-// Load container
-$container = require __DIR__ . '/../config/services.php';
-$container->compile();
+$kernel = new Kernel($_SERVER['APP_ENV'] ?? 'prod', (bool) ($_SERVER['APP_DEBUG'] ?? false));
+$kernel->boot();
 
-// Create console application
 $application = new Application('RSS Feed Generator', '1.0.0');
-
-// Register the command
-$application->add($container->get(\App\Command\GenerateRssCommand::class));
+$application->setCommandLoader($kernel->getContainer()->get('console.command_loader'));
 
 $application->run();

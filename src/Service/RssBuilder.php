@@ -7,17 +7,15 @@ namespace App\Service;
 use App\Model\RssFeed;
 use Twig\Environment;
 
-class RssBuilder
+readonly class RssBuilder
 {
     public function __construct(
-        private readonly Environment $twig
+        private Environment $twig
     ) {
     }
 
     public function buildRss(RssFeed $feed): string
     {
-        return $this->twig->render('rss.xml.twig', [
-            'feed' => $feed,
-        ]);
+        return $this->twig->render('rss.xml.twig', ['feed' => $feed]);
     }
 }

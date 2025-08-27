@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Model;
 
 use App\Model\ContentItem;
+use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class ContentItemTest extends TestCase
+final class ContentItemTest extends TestCase
 {
-    public function testCreateContentItem(): void
+    #[Test]
+    public function createContentItem(): void
     {
-        $pubDate = new \DateTimeImmutable('2023-12-01 10:00:00');
+        $pubDate = new DateTimeImmutable('2023-12-01 10:00:00');
 
         $item = new ContentItem(
             title: 'Test Title',
@@ -32,26 +35,28 @@ class ContentItemTest extends TestCase
         $this->assertSame('Test Author', $item->author);
     }
 
-    public function testGetGuidWithCustomGuid(): void
+    #[Test]
+    public function getGuidWithCustomGuid(): void
     {
         $item = new ContentItem(
             title: 'Test',
             description: 'Test',
             link: 'https://example.com/test',
-            pubDate: new \DateTimeImmutable(),
+            pubDate: new DateTimeImmutable(),
             guid: 'custom-guid'
         );
 
         $this->assertSame('custom-guid', $item->getGuid());
     }
 
-    public function testGetGuidWithoutCustomGuid(): void
+    #[Test]
+    public function getGuidWithoutCustomGuid(): void
     {
         $item = new ContentItem(
             title: 'Test',
             description: 'Test',
             link: 'https://example.com/test',
-            pubDate: new \DateTimeImmutable()
+            pubDate: new DateTimeImmutable()
         );
 
         $this->assertSame('https://example.com/test', $item->getGuid());

@@ -13,47 +13,57 @@ namespace App\Examples;
 
 use App\Model\ContentItem;
 use App\Service\ContentFetcherInterface;
+use DateTimeImmutable;
+use RuntimeException;
 
-class CsvContentFetcher implements ContentFetcherInterface
+readonly class CsvContentFetcher implements ContentFetcherInterface
 {
     public function __construct(
-        private readonly string $csvFilePath
+        private string $csvFilePath
     ) {
     }
 
     public function fetchContent(): array
     {
-        if (!file_exists($this->csvFilePath)) {
-            throw new \RuntimeException("CSV file not found: {$this->csvFilePath}");
+        $handle = $this->openCsvFile();
+        
+        try {
+            // Skip header row
+            fgetcsv($handle);
+            
+            $items = [];
+            while (($row = fgetcsv($handle)) !== false) {
+                $items[] = self::createContentItemFromRow($row);
+            }
+            
+            return $items;
+        } finally {
+            fclose($handle);
         }
-
-        $items = [];
-        $handle = fopen($this->csvFilePath, 'r');
-
-        if ($handle === false) {
-            throw new \RuntimeException("Cannot open CSV file: {$this->csvFilePath}");
-        }
-
-        // Skip header row
-        fgetcsv($handle);
-
-        while (($row = fgetcsv($handle)) !== false) {
-            $items[] = $this->createContentItemFromRow($row);
-        }
-
-        fclose($handle);
-
-        return $items;
     }
 
-    private function createContentItemFromRow(array $row): ContentItem
+    private function openCsvFile()
+    {
+        if (!file_exists($this->csvFilePath)) {
+            throw new RuntimeException("CSV file not found: {$this->csvFilePath}");
+        }
+
+        $handle = fopen($this->csvFilePath, 'r');
+        
+        return match ($handle) {
+            false => throw new RuntimeException("Cannot open CSV file: {$this->csvFilePath}"),
+            default => $handle
+        };
+    }
+
+    private static function createContentItemFromRow(array $row): ContentItem
     {
         // Expected CSV format: title, description, link, date, category, author
         return new ContentItem(
             title: $row[0] ?? 'Untitled',
             description: $row[1] ?? '',
             link: $row[2] ?? '',
-            pubDate: new \DateTimeImmutable($row[3] ?? 'now'),
+            pubDate: new DateTimeImmutable($row[3] ?? 'now'),
             guid: null, // Will use link as GUID
             category: $row[4] ?? null,
             author: $row[5] ?? null

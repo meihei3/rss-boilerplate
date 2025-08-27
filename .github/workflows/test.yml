@@ -36,6 +36,9 @@ jobs:
     - name: Run code style check
       run: composer phpcs
 
+    - name: Run static analysis
+      run: composer phpstan
+
     - name: Run tests
       run: composer test
 
