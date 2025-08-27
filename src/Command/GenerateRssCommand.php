@@ -85,9 +85,9 @@ final class GenerateRssCommand extends Command
     private function createFeed(InputInterface $input, array $contentItems): RssFeed
     {
         return new RssFeed(
-            title: $input->getOption('title'),
-            description: $input->getOption('description'),
-            link: $input->getOption('link'),
+            title: (string) $input->getOption('title'),
+            description: (string) $input->getOption('description'),
+            link: (string) $input->getOption('link'),
             items: $contentItems
         );
     }
@@ -96,7 +96,7 @@ final class GenerateRssCommand extends Command
     {
         $io->section('Generating RSS feed...');
         $rssContent = $this->rssBuilder->buildRss($feed);
-        $filename = $input->getOption('output');
+        $filename = (string) $input->getOption('output');
         $this->fileManager->saveContent($filename, $rssContent);
         $io->success(sprintf('RSS feed saved to %s', $filename));
     }

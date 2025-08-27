@@ -21,7 +21,7 @@ readonly class JsonContentFetcher implements ContentFetcherInterface
         $response = $this->httpClient->request('GET', $this->contentSourceUrl);
         $data = $response->toArray();
 
-        return array_map(self::createContentItem(...), $data);
+        return array_map(fn(array $item): ContentItem => self::createContentItem($item), $data);
     }
 
     /**
@@ -30,16 +30,16 @@ readonly class JsonContentFetcher implements ContentFetcherInterface
     private static function createContentItem(array $data): ContentItem
     {
         return new ContentItem(
-            title: $data['title'] ?? 'Untitled',
-            description: $data['description'] ?? $data['content'] ?? '',
-            link: $data['link'] ?? $data['url'] ?? '',
+            title: (string) ($data['title'] ?? 'Untitled'),
+            description: (string) ($data['description'] ?? $data['content'] ?? ''),
+            link: (string) ($data['link'] ?? $data['url'] ?? ''),
             pubDate: match (isset($data['date'])) {
-                true => new DateTimeImmutable($data['date']),
+                true => new DateTimeImmutable((string) $data['date']),
                 false => new DateTimeImmutable()
             },
-            guid: $data['guid'] ?? $data['id'] ?? null,
-            category: $data['category'] ?? null,
-            author: $data['author'] ?? null
+            guid: isset($data['guid']) ? (string) $data['guid'] : (isset($data['id']) ? (string) $data['id'] : null),
+            category: isset($data['category']) ? (string) $data['category'] : null,
+            author: isset($data['author']) ? (string) $data['author'] : null
         );
     }
 }
