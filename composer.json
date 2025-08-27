@@ -26,6 +26,10 @@
         "symfony/http-client": "7.3.*",
         "symfony/filesystem": "7.3.*",
         "symfony/dotenv": "7.3.*",
+        "symfony/framework-bundle": "7.3.*",
+        "symfony/http-kernel": "7.3.*",
+        "symfony/twig-bundle": "7.3.*",
+        "symfony/yaml": "7.3.*",
         "twig/twig": "^3.0"
     },
     "require-dev": {
