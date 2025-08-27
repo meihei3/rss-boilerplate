@@ -6,6 +6,8 @@
 
 任意のJSON APIからRSSフィードを生成する汎用的なボイラープレート。PHP 8.4の最新機能とSymfony 7.3 MicroKernelを使用。
 
+**外部データ処理に特化**: 外部JSON APIの型構造が不確実な環境でも安全に動作するよう設計。
+
 ## 🚀 クイックスタート
 
 ```bash
@@ -58,8 +60,9 @@ composer phpcbf
 - **PHP 8.4必須**: readonly classes, match expressions等を使用
 - **PSR-12準拠**: コードスタイル必須
 - **PHPStan Level 8**: 実用的な最高レベル静的解析
-  - `level: max`は技術的には最高だが、mixed型のキャスト等で過度に厳密
-  - `level: 8`が型安全性と開発効率のベストバランス
+  - `level: max`や`level: 10`は外部JSON APIデータとの相性が悪い
+  - 外部APIのレスポンス構造を完全に型定義するのは現実的でない
+  - `level: 8`が外部データ処理と型安全性のベストバランス
 - **PHPUnit**: `$this->assert*()` スタイル推奨
 
 ### アーキテクチャ
