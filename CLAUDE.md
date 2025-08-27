@@ -1,10 +1,10 @@
 # RSS Boilerplate
 
-任意のJSON APIからRSSフィードを生成する汎用ボイラープレート（PHP 8.4 + Symfony 7.3）
+任意のJSON APIからRSSフィードを生成する汎用ボイラープレート
 
 ## 🎯 プロジェクト目的
 
-Square Release Notes RSSをベースに汎用化。外部JSON APIの構造変更に対応できる堅牢なRSS生成基盤。
+外部JSON APIの構造変更に対応できる堅牢なRSS生成基盤。
 
 ## 🚀 基本使用法
 
@@ -68,7 +68,7 @@ git commit -m "feat: NewContentFetcherの追加" && git push -u origin HEAD
 ## 🔧 技術仕様・制約
 
 ### コード品質
-- **PHP 8.4**: readonly classes, match expressions使用
+- **Modern PHP**: readonly classes, match expressions使用
 - **PSR-12準拠**: コードスタイル必須
 - **PHPStan Level 8**: 外部データ処理と型安全性のバランス最適
 
