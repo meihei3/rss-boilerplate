@@ -57,7 +57,9 @@ composer phpcbf
 ### コード品質
 - **PHP 8.4必須**: readonly classes, match expressions等を使用
 - **PSR-12準拠**: コードスタイル必須
-- **PHPStan Level 8**: 最高レベルの静的解析
+- **PHPStan Level 8**: 実用的な最高レベル静的解析
+  - `level: max`は技術的には最高だが、mixed型のキャスト等で過度に厳密
+  - `level: 8`が型安全性と開発効率のベストバランス
 - **PHPUnit**: `$this->assert*()` スタイル推奨
 
 ### アーキテクチャ
