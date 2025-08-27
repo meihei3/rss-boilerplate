@@ -1,0 +1,52 @@
+name: Generate and Deploy RSS
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  generate-rss:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        extensions: ctype, dom, iconv, libxml, simplexml
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-dev
+
+    - name: Generate RSS Feed
+      env:
+        CONTENT_SOURCE_URL: ${{ secrets.CONTENT_SOURCE_URL || 'https://api.example.com/changelog' }}
+        RSS_TITLE: ${{ vars.RSS_TITLE || 'Generated RSS Feed' }}
+        RSS_DESCRIPTION: ${{ vars.RSS_DESCRIPTION || 'Automatically generated RSS feed' }}
+        RSS_LINK: ${{ vars.RSS_LINK || 'https://example.com' }}
+      run: php bin/console generate-rss
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v3
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: ./docs
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v2
