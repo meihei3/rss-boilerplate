@@ -109,3 +109,52 @@ RSS_DESCRIPTION="Generated RSS feed"
 ## 📝 ライセンス
 
 MIT License - 詳細は [LICENSE](LICENSE) を参照
+
+---
+
+## 🔧 開発ルール
+
+### ブランチ作成ルール
+- **機能開発**: `feature/{{ticket-id}}`
+- **バグ修正**: `hotfix/{{ticket-id}}`
+
+### ブランチ管理
+- `main`ブランチで作業していた場合、コミット前に適切なブランチを作成
+- 必ず`git status`と`git --no-pager diff`で状況確認
+- **タスク完了よりもコミットの粒度を重視**
+- diffがあればタスク未完了でもコミットすること
+
+### コミットメッセージルール
+
+#### プレフィックス（type:）
+- `feat`: 新機能追加・削除
+- `fix`: バグ修正
+- `refactor`: コード再構築（動作変更なし）
+- `perf`: パフォーマンス改善
+- `style`: フォーマット関連
+- `test`: テスト関連
+- `docs`: ドキュメント関連
+- `build`: ビルド関連（CI、依存関係等）
+- `chore`: その他雑務
+
+#### メッセージ形式
+- **言語**: 日本語で記述
+- **1行目**: なぜこの変更をしたのかを記載
+- **3行目以降**: 詳細な実施内容（体言止め、`- `でリスト形式）
+
+```bash
+feat: RSS生成機能の改善
+
+- JsonContentFetcherのエラーハンドリング強化
+- テストケースの追加
+- PHPDocの型注釈改善
+```
+
+### Pull Request作成
+```bash
+# プッシュ
+git push -u origin HEAD
+
+# PR作成（日本語、自分をアサイン）
+gh pr create --assignee @me --title "feat: RSS生成機能の改善"
+```
