@@ -24,11 +24,11 @@ final class RssFeedTest extends TestCase
             items: []
         );
 
-        self::assertSame('Test Feed', $feed->title);
-        self::assertSame('Test Description', $feed->description);
-        self::assertSame('https://example.com', $feed->link);
-        self::assertSame('en', $feed->language);
-        self::assertEmpty($feed->items);
+        $this->assertSame('Test Feed', $feed->title);
+        $this->assertSame('Test Description', $feed->description);
+        $this->assertSame('https://example.com', $feed->link);
+        $this->assertSame('en', $feed->language);
+        $this->assertEmpty($feed->items);
     }
 
     #[Test]
@@ -51,7 +51,7 @@ final class RssFeedTest extends TestCase
             items: $items
         );
 
-        self::assertEquals($date2, $feed->getLastBuildDate());
+        $this->assertEquals($date2, $feed->getLastBuildDate());
     }
 
     #[Test]
@@ -65,6 +65,6 @@ final class RssFeedTest extends TestCase
         );
 
         $lastBuildDate = $feed->getLastBuildDate();
-        self::assertInstanceOf(DateTimeInterface::class, $lastBuildDate);
+        $this->assertInstanceOf(DateTimeInterface::class, $lastBuildDate);
     }
 }

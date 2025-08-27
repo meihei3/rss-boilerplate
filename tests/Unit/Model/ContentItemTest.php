@@ -26,13 +26,13 @@ final class ContentItemTest extends TestCase
             author: 'Test Author'
         );
 
-        self::assertSame('Test Title', $item->title);
-        self::assertSame('Test Description', $item->description);
-        self::assertSame('https://example.com/test', $item->link);
-        self::assertSame($pubDate, $item->pubDate);
-        self::assertSame('test-guid', $item->guid);
-        self::assertSame('Test Category', $item->category);
-        self::assertSame('Test Author', $item->author);
+        $this->assertSame('Test Title', $item->title);
+        $this->assertSame('Test Description', $item->description);
+        $this->assertSame('https://example.com/test', $item->link);
+        $this->assertSame($pubDate, $item->pubDate);
+        $this->assertSame('test-guid', $item->guid);
+        $this->assertSame('Test Category', $item->category);
+        $this->assertSame('Test Author', $item->author);
     }
 
     #[Test]
@@ -46,7 +46,7 @@ final class ContentItemTest extends TestCase
             guid: 'custom-guid'
         );
 
-        self::assertSame('custom-guid', $item->getGuid());
+        $this->assertSame('custom-guid', $item->getGuid());
     }
 
     #[Test]
@@ -59,6 +59,6 @@ final class ContentItemTest extends TestCase
             pubDate: new DateTimeImmutable()
         );
 
-        self::assertSame('https://example.com/test', $item->getGuid());
+        $this->assertSame('https://example.com/test', $item->getGuid());
     }
 }
