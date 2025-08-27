@@ -2,7 +2,7 @@
     "name": "rss-boilerplate/rss-feed-generator",
     "description": "A generic RSS feed generator boilerplate for any changelog or content source",
     "type": "project",
-    "license": "MIT",
+    "license": "proprietary",
     "autoload": {
         "psr-4": {
             "App\\": "src/"

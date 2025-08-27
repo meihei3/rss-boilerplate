@@ -99,4 +99,4 @@ This boilerplate is designed to work with GitHub Actions for automatic deploymen
 
 ## License
 
-MIT License - see LICENSE file for details
+This project is proprietary software.
