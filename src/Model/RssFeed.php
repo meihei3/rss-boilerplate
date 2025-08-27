@@ -4,27 +4,32 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-class RssFeed
+use DateTimeInterface;
+use DateTimeImmutable;
+
+readonly class RssFeed
 {
     /**
      * @param ContentItem[] $items
      */
     public function __construct(
-        public readonly string $title,
-        public readonly string $description,
-        public readonly string $link,
-        public readonly string $language = 'en',
-        public readonly ?string $imageUrl = null,
-        public readonly array $items = []
+        public string $title,
+        public string $description,
+        public string $link,
+        public string $language = 'en',
+        public ?string $imageUrl = null,
+        public array $items = []
     ) {
     }
 
-    public function getLastBuildDate(): \DateTimeInterface
+    public function getLastBuildDate(): DateTimeInterface
     {
-        if (empty($this->items)) {
-            return new \DateTimeImmutable();
-        }
-
-        return max(array_map(fn (ContentItem $item) => $item->pubDate, $this->items));
+        return match (empty($this->items)) {
+            true => new DateTimeImmutable(),
+            false => max(array_map(
+                static fn(ContentItem $item): DateTimeInterface => $item->pubDate,
+                $this->items
+            ))
+        };
     }
 }

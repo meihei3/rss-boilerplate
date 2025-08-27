@@ -13,14 +13,15 @@ namespace App\Examples;
 
 use App\Model\ContentItem;
 use App\Service\ContentFetcherInterface;
+use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomApiContentFetcher implements ContentFetcherInterface
+readonly class CustomApiContentFetcher implements ContentFetcherInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        private readonly string $apiKey,
-        private readonly string $baseUrl
+        private HttpClientInterface $httpClient,
+        private string $apiKey,
+        private string $baseUrl
     ) {
     }
 
@@ -35,18 +36,21 @@ class CustomApiContentFetcher implements ContentFetcherInterface
 
         $data = $response->toArray();
         
-        return array_map([$this, 'transformToContentItem'], $data['releases'] ?? []);
+        return array_map(self::transformToContentItem(...), $data['releases'] ?? []);
     }
 
-    private function transformToContentItem(array $release): ContentItem
+    private static function transformToContentItem(array $release): ContentItem
     {
         return new ContentItem(
-            title: $release['version'] . ': ' . $release['name'],
+            title: sprintf('%s: %s', $release['version'], $release['name']),
             description: $release['changelog'] ?? $release['notes'] ?? '',
             link: $release['html_url'] ?? $release['url'] ?? '',
-            pubDate: new \DateTimeImmutable($release['published_at'] ?? $release['created_at'] ?? 'now'),
+            pubDate: new DateTimeImmutable($release['published_at'] ?? $release['created_at'] ?? 'now'),
             guid: $release['tag_name'] ?? $release['id'] ?? null,
-            category: $release['prerelease'] ? 'Pre-release' : 'Release',
+            category: match ($release['prerelease'] ?? false) {
+                true => 'Pre-release',
+                false => 'Release'
+            },
             author: $release['author']['login'] ?? null
         );
     }

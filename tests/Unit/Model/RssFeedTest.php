@@ -6,11 +6,15 @@ namespace App\Tests\Unit\Model;
 
 use App\Model\ContentItem;
 use App\Model\RssFeed;
+use DateTimeImmutable;
+use DateTimeInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
-class RssFeedTest extends TestCase
+final class RssFeedTest extends TestCase
 {
-    public function testCreateRssFeed(): void
+    #[Test]
+    public function createRssFeed(): void
     {
         $feed = new RssFeed(
             title: 'Test Feed',
@@ -20,18 +24,19 @@ class RssFeedTest extends TestCase
             items: []
         );
 
-        $this->assertSame('Test Feed', $feed->title);
-        $this->assertSame('Test Description', $feed->description);
-        $this->assertSame('https://example.com', $feed->link);
-        $this->assertSame('en', $feed->language);
-        $this->assertEmpty($feed->items);
+        self::assertSame('Test Feed', $feed->title);
+        self::assertSame('Test Description', $feed->description);
+        self::assertSame('https://example.com', $feed->link);
+        self::assertSame('en', $feed->language);
+        self::assertEmpty($feed->items);
     }
 
-    public function testGetLastBuildDateWithItems(): void
+    #[Test]
+    public function getLastBuildDateWithItems(): void
     {
-        $date1 = new \DateTimeImmutable('2023-12-01 10:00:00');
-        $date2 = new \DateTimeImmutable('2023-12-02 10:00:00');
-        $date3 = new \DateTimeImmutable('2023-11-30 10:00:00');
+        $date1 = new DateTimeImmutable('2023-12-01 10:00:00');
+        $date2 = new DateTimeImmutable('2023-12-02 10:00:00');
+        $date3 = new DateTimeImmutable('2023-11-30 10:00:00');
 
         $items = [
             new ContentItem('Title 1', 'Desc 1', 'https://example.com/1', $date1),
@@ -46,10 +51,11 @@ class RssFeedTest extends TestCase
             items: $items
         );
 
-        $this->assertEquals($date2, $feed->getLastBuildDate());
+        self::assertEquals($date2, $feed->getLastBuildDate());
     }
 
-    public function testGetLastBuildDateWithoutItems(): void
+    #[Test]
+    public function getLastBuildDateWithoutItems(): void
     {
         $feed = new RssFeed(
             title: 'Test Feed',
@@ -59,6 +65,6 @@ class RssFeedTest extends TestCase
         );
 
         $lastBuildDate = $feed->getLastBuildDate();
-        $this->assertInstanceOf(\DateTimeInterface::class, $lastBuildDate);
+        self::assertInstanceOf(DateTimeInterface::class, $lastBuildDate);
     }
 }
