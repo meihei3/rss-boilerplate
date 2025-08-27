@@ -9,8 +9,6 @@
 # Cache and build directories
 /.phpunit.cache/
 /coverage/
-/docs/*
-!/docs/.gitkeep
 
 # IDE files
 .idea/
