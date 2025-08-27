@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Model\ContentItem;
 use App\Model\RssFeed;
 use App\Service\ContentFetcherInterface;
 use App\Service\FileManager;
@@ -66,6 +67,9 @@ final class GenerateRssCommand extends Command
         }
     }
 
+    /**
+     * @return ContentItem[]
+     */
     private function fetchContent(SymfonyStyle $io): array
     {
         $io->section('Fetching content...');
@@ -75,6 +79,9 @@ final class GenerateRssCommand extends Command
         return $contentItems;
     }
 
+    /**
+     * @param ContentItem[] $contentItems
+     */
     private function createFeed(InputInterface $input, array $contentItems): RssFeed
     {
         return new RssFeed(
@@ -94,6 +101,9 @@ final class GenerateRssCommand extends Command
         $io->success(sprintf('RSS feed saved to %s', $filename));
     }
 
+    /**
+     * @param array<array{string, string, int, string, string}> $options
+     */
     private function addOptions(array $options): void
     {
         foreach ($options as [$name, $shortcut, $mode, $description, $default]) {

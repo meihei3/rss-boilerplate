@@ -24,6 +24,9 @@ readonly class JsonContentFetcher implements ContentFetcherInterface
         return array_map(self::createContentItem(...), $data);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private static function createContentItem(array $data): ContentItem
     {
         return new ContentItem(
