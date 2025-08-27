@@ -12,7 +12,7 @@ class ContentItemTest extends TestCase
     public function testCreateContentItem(): void
     {
         $pubDate = new \DateTimeImmutable('2023-12-01 10:00:00');
-        
+
         $item = new ContentItem(
             title: 'Test Title',
             description: 'Test Description',

@@ -24,7 +24,7 @@ class FileManager
     public function loadContent(string $filename): ?string
     {
         $filePath = $this->publicDirectory . '/' . $filename;
-        
+
         if (!$this->filesystem->exists($filePath)) {
             return null;
         }
