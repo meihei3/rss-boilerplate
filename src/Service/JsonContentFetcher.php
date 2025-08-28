@@ -21,7 +21,7 @@ readonly class JsonContentFetcher implements ContentFetcherInterface
         $response = $this->httpClient->request('GET', $this->contentSourceUrl);
         $data = $response->toArray();
 
-        return array_map(fn(array $item): ContentItem => self::createContentItem($item), $data);
+        return array_map(fn(array $item): ContentItem => self::createContentItem($item), $data['products']);
     }
 
     /**
