@@ -7,8 +7,12 @@
 .env.*.local
 
 # Cache and build directories
+/var/
 /.phpunit.cache/
 /coverage/
+
+# Composer
+/composer.phar
 
 # IDE files
 .idea/

@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set('content_source_url', '%env(string:default:content_source_default:CONTENT_SOURCE_URL)%');
-    $parameters->set('content_source_default', 'https://api.example.com/changelog');
+    $parameters->set('content_source_default', 'https://dummyjson.com/products');
     $parameters->set('public_directory', '%kernel.project_dir%/docs/');
 
     $services = $containerConfigurator->services();
