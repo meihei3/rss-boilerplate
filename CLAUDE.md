@@ -95,15 +95,29 @@ CONTENT_SOURCE_URL=https://api.example.com/feed
 
 ## 🔄 開発ワークフロー
 
+### ⚠️ 重要: 必ずブランチ作成
+**mainブランチへの直接コミット・プッシュは絶対禁止**
+
 ### ブランチ・コミット
-- **命名**: `feature/{{ticket-id}}`, `hotfix/{{ticket-id}}`
+- **命名**: `feature/{{ticket-id}}`, `hotfix/{{ticket-id}}`, `docs/{{description}}`
+- **作業前に必ずブランチ作成**: `git checkout -b feature/new-feature`
 - **コミット粒度重視**: diff存在時は未完了でもコミット
 - **日本語メッセージ**: `feat: 理由` + 詳細リスト
 
-### PR作成
+### 正しい作業フロー
 ```bash
+# 1. 必ずブランチ作成
+git checkout -b feature/new-feature
+
+# 2. 作業・コミット
+git add . && git commit -m "feat: 新機能追加"
+
+# 3. プッシュ・PR作成
 git push -u origin HEAD
-gh pr create --assignee @me --title "feat: 機能名"
+gh pr create --assignee @me --title "feat: 新機能追加"
+
+# 4. PR承認後マージ
+gh pr merge --squash
 ```
 
 ---
