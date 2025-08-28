@@ -42,7 +42,29 @@ jobs:
     - name: Generate RSS Feed
       run: composer generate-rss
 
-    - name: Commit and push changes
-      uses: stefanzweifel/git-auto-commit-action@v5
+    - name: Check for changes
+      id: changes
+      run: |
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "timestamp=$(date +%Y%m%d-%H%M%S)" >> $GITHUB_OUTPUT
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create Pull Request
+      if: steps.changes.outputs.changes == 'true'
+      uses: peter-evans/create-pull-request@v7
       with:
-        commit_message: RSS feed updated
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: RSS feed updated
+        title: 'RSS feed updated - ${{ steps.changes.outputs.timestamp }}'
+        body: |
+          Automated RSS feed update
+          
+          - Generated RSS from latest content source
+          - Updated feed.xml with new timestamps
+          
+          🤖 Generated automatically by GitHub Actions
+        branch: rss-update-${{ steps.changes.outputs.timestamp }}
+        delete-branch: true
