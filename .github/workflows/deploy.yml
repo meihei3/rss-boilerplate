@@ -31,12 +31,10 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-dev
 
+    - name: Copy environment file
+      run: cp .env.example .env
+
     - name: Generate RSS Feed
-      env:
-        CONTENT_SOURCE_URL: ${{ secrets.CONTENT_SOURCE_URL || 'https://api.example.com/changelog' }}
-        RSS_TITLE: ${{ vars.RSS_TITLE || 'Generated RSS Feed' }}
-        RSS_DESCRIPTION: ${{ vars.RSS_DESCRIPTION || 'Automatically generated RSS feed' }}
-        RSS_LINK: ${{ vars.RSS_LINK || 'https://example.com' }}
       run: php bin/console generate-rss
 
     - name: Setup Pages
