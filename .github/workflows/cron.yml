@@ -42,7 +42,22 @@ jobs:
     - name: Generate RSS Feed
       run: composer generate-rss
 
-    - name: Commit and push changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: RSS feed updated
+    - name: Create and merge PR if changes exist
+      run: |
+        if [[ -n $(git status --porcelain) ]]; then
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          timestamp=$(date +%Y%m%d-%H%M%S)
+          branch="rss-update-$timestamp"
+          git checkout -b $branch
+          git add .
+          git commit -m "RSS feed updated"
+          git push origin $branch
+          gh pr create --title "RSS feed updated - $timestamp" --body "Automated RSS feed update
+
+          - Generated RSS from latest content source
+          - Updated feed.xml with new timestamps
+
+          🤖 Generated automatically by GitHub Actions" --head $branch
+          gh pr merge --auto --squash
+        fi
