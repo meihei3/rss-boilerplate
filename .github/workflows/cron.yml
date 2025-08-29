@@ -8,6 +8,13 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
+  checks: write
+  deployments: write
+  issues: write
+  repository-projects: write
+  security-events: write
+  statuses: write
 
 jobs:
   deploy:
@@ -45,7 +52,7 @@ jobs:
 
     - name: Create and merge PR if changes exist
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         if [[ -n $(git status --porcelain) ]]; then
           git config user.name github-actions[bot]
